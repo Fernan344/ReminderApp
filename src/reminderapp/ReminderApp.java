@@ -7,7 +7,20 @@ package reminderapp;
 import Alarma.Recordador;
 import Alarma.Reproductor;
 import Db.DB;
+import UI.FileChooser;
+import UI.LookManager;
 import UI.Principal;
+import com.jtattoo.plaf.AbstractBorderFactory;
+import com.jtattoo.plaf.AbstractIconFactory;
+import com.jtattoo.plaf.AbstractLookAndFeel;
+import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
+import com.jtattoo.plaf.aero.AeroLookAndFeel;
+import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
+import com.jtattoo.plaf.bernstein.BernsteinLookAndFeel;
+import com.jtattoo.plaf.fast.FastLookAndFeel;
+import com.jtattoo.plaf.graphite.GraphiteLookAndFeel;
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
+import com.jtattoo.plaf.luna.LunaLookAndFeel;
 import java.io.File;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -17,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.basic.BasicLookAndFeel;
 
 /**
  *
@@ -28,24 +42,21 @@ public class ReminderApp {
      * @param args the command line arguments
      */
     
-    public static Principal pagina = new Principal();
+    public static Principal pagina;
     public static Reproductor  mp3Player = new Reproductor();
     
     public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("error 1");
-            Logger.getLogger(ReminderApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            System.out.println("error 2");
-            Logger.getLogger(ReminderApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            System.out.println("error 3");
-            Logger.getLogger(ReminderApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            System.out.println("error 4");
-            Logger.getLogger(ReminderApp.class.getName()).log(Level.SEVERE, null, ex);
+        LookManager.setLook(new BernsteinLookAndFeel());
+        
+        pagina = new Principal();
+
+        FileChooser fc = new FileChooser();
+        
+        File archivo = fc.getFile();
+
+        // muestra error si es inválido
+        if ((archivo == null) || (archivo.getName().equals(""))) {
+            JOptionPane.showMessageDialog(null, "Nombre de archivo inválido", "Nombre de archivo inválido", JOptionPane.ERROR_MESSAGE);
         }
         
         DB.initEvents();       

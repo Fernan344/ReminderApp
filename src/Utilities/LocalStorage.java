@@ -11,7 +11,7 @@ import java.util.LinkedList;
  * @author teval
  */
 public class LocalStorage {
-    private static LinkedList<Storage> storage;
+    private static LinkedList<Storage> storage=new LinkedList<>();
 
     public static void addStorage(String nombre, Storage.tipos tipo, Object objeto){
         boolean added = false;

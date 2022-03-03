@@ -8,8 +8,13 @@ import Db.DB;
 import Objects.Evento;
 import Utilities.LocalStorage;
 import Utilities.Storage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import reminderapp.ReminderApp;
 
 /**
  *
@@ -21,7 +26,8 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     public Principal() {
-        initComponents();   
+        initComponents();  
+        
         this.setDefaultCloseOperation(0);
         llenarTabla();
     }
