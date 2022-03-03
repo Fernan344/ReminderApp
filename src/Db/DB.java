@@ -16,6 +16,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.simple.JSONArray;
@@ -64,14 +68,13 @@ public class DB {
         model.addColumn("Hora Fin");
         model.addColumn("Tiempo Falta");
         model.addColumn("Notificacion");
-        model.addColumn("Eliminar");
         
         for(int i=0; i<eventos.size(); i++){
             Evento evento = eventos.get(i);
             if(evento.isState())
                 model.addRow(new Object[]{i, evento.getNombre()
                     , evento.getFechaFin().toInstant().toString().split("T")[0] , (evento.getHoraFin()+":"+evento.getMinutoFin()), evento.getTiempoFaltante(), evento.isIsNotify() ? "Notificaciones":"Sin Notificaciones"
-                    , "Click Para Eliminar"});
+                    });
         }
 
         return model;

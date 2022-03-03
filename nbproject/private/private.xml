@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/teval/Documents/NetBeansProjects/ReminderApp/src/Db/DB.java</file>
             <file>file:/C:/Users/teval/Documents/NetBeansProjects/ReminderApp/src/reminderapp/ReminderApp.java</file>
+            <file>file:/C:/Users/teval/Documents/NetBeansProjects/ReminderApp/src/Utilities/LocalStorage.java</file>
+            <file>file:/C:/Users/teval/Documents/NetBeansProjects/ReminderApp/src/UI/AddEvent.java</file>
+            <file>file:/C:/Users/teval/Documents/NetBeansProjects/ReminderApp/src/Utilities/Storage.java</file>
+            <file>file:/C:/Users/teval/Documents/NetBeansProjects/ReminderApp/src/UI/Principal.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,0 +1,51 @@
+[
+{
+"nombre": "Economia Naranja",
+"fechaInicio": "Tue Feb 22 00:00:00 CST 2022",
+"fechaFin": "Fri Feb 25 00:00:00 CST 2022",
+"horaFin": "23",
+"minutoFin": "59",
+"isNotify": "true",
+"state": "false"
+},{
+"nombre": "Tarea Lenguaje De Se�as",
+"fechaInicio": "Sat Feb 26 00:00:00 CST 2022",
+"fechaFin": "Thu Mar 03 00:00:00 CST 2022",
+"horaFin": "23",
+"minutoFin": "59",
+"isNotify": "true",
+"state": "true"
+},{
+"nombre": "La economia y el covid en 2022",
+"fechaInicio": "Sat Feb 26 00:00:00 CST 2022",
+"fechaFin": "Fri Mar 04 00:00:00 CST 2022",
+"horaFin": "23",
+"minutoFin": "59",
+"isNotify": "true",
+"state": "true"
+},{
+"nombre": "Practica 1 semi",
+"fechaInicio": "Fri Feb 25 00:00:00 CST 2022",
+"fechaFin": "Sun Mar 06 00:00:00 CST 2022",
+"horaFin": "23",
+"minutoFin": "59",
+"isNotify": "true",
+"state": "true"
+},{
+"nombre": "Entrega Proyecto IA",
+"fechaInicio": "Thu Feb 24 00:00:00 CST 2022",
+"fechaFin": "Fri Mar 11 00:00:00 CST 2022",
+"horaFin": "23",
+"minutoFin": "59",
+"isNotify": "true",
+"state": "false"
+},{
+"nombre": "Evaluacion Lenguaje de Se�as",
+"fechaInicio": "Sat Feb 26 00:00:00 CST 2022",
+"fechaFin": "Sat Mar 12 00:00:00 CST 2022",
+"horaFin": "10",
+"minutoFin": "0",
+"isNotify": "true",
+"state": "true"
+}
+]

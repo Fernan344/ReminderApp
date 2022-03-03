@@ -6,6 +6,8 @@ package UI;
 
 import Db.DB;
 import Objects.Evento;
+import Utilities.LocalStorage;
+import Utilities.Storage;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,6 +39,8 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -62,6 +66,20 @@ public class Principal extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Eventos Proximos");
 
+        jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Editar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -71,6 +89,11 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,7 +101,11 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(7, 7, 7)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)))
         );
 
         jMenu1.setText("File");
@@ -129,26 +156,41 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        int fila = jTable1.getSelectedRow();
-        int columna = jTable1.getSelectedColumn(); 
-        if(columna==6){
-            if(fila!=-1){ 
-                DefaultTableModel modelo = (DefaultTableModel) this.jTable1.getModel();
-                System.out.println(modelo.getValueAt(fila, 0).toString());
-                int index = Integer.valueOf(modelo.getValueAt(fila, 0).toString());
-                if(JOptionPane.showConfirmDialog(null, "Desea Eliminar El Evento?", "Eliminar", 2, 0)==0){
-                    DB.getEvent(index).setState(false);
-                    this.llenarTabla();                
-                }
-            }
-        }
+        
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int fila = jTable1.getSelectedRow();
+        if(fila!=-1){ 
+            DefaultTableModel modelo = (DefaultTableModel) this.jTable1.getModel();
+            int index = Integer.valueOf(modelo.getValueAt(fila, 0).toString());
+            if(JOptionPane.showConfirmDialog(null, "Desea Eliminar El Evento?", "Eliminar", 2, 0)==0){
+                DB.getEvent(index).setState(false);
+                this.llenarTabla();                
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "No Se Ha Seleccionado Un Evento");
+        }        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int fila = jTable1.getSelectedRow();
+        if(fila!=-1){ 
+            DefaultTableModel modelo = (DefaultTableModel) this.jTable1.getModel();
+            int index = Integer.valueOf(modelo.getValueAt(fila, 0).toString());
+            LocalStorage.addStorage("editEvent", Storage.tipos.Evento, DB.getEvent(index));
+        }else{
+            JOptionPane.showMessageDialog(this, "No Se Ha Seleccionado Un Evento");
+        } 
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void llenarTabla(){
         jTable1.setModel(DB.fillTable());
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
