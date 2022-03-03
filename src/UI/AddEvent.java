@@ -29,6 +29,7 @@ public class AddEvent extends javax.swing.JFrame {
         initComponents();
         this.setDefaultCloseOperation(0);
         jDateChooser1.setDateFormatString("MM/dd/YYYY");
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -212,7 +213,6 @@ public class AddEvent extends javax.swing.JFrame {
             int minFin = jSpinField2.getValue();
 
             DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin));
-            ReminderApp.pagina.setVisible(true);
             DB.saveEvent();
             this.dispose();            
             
@@ -223,9 +223,7 @@ public class AddEvent extends javax.swing.JFrame {
         
     }                                        
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        Principal p = new Principal();
-        p.setVisible(true);
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                
         this.dispose();
     }                                        
 

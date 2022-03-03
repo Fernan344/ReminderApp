@@ -30,6 +30,7 @@ public class Principal extends javax.swing.JFrame {
         
         this.setDefaultCloseOperation(0);
         llenarTabla();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -153,7 +154,6 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         AddEvent ae = new AddEvent();
         ae.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
