@@ -212,7 +212,7 @@ public class AddEvent extends javax.swing.JFrame {
             int horaFin = jSpinField1.getValue();
             int minFin = jSpinField2.getValue();
 
-            DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin));
+            //DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin));
             DB.saveEvent();
             this.dispose();            
             

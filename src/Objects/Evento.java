@@ -4,6 +4,7 @@
  */
 package Objects;
 
+import Alarma.Reproductor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,8 +31,9 @@ public class Evento implements Comparable<Evento>{
     private int minutoFin;
     private String tiempoFaltante;
     private boolean aviso;
+    private String song;
 
-    public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify, boolean state, int horaFin, int minutoFin) {
+    public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify, boolean state, int horaFin, int minutoFin, String song) {
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -40,6 +42,7 @@ public class Evento implements Comparable<Evento>{
         this.horaFin = horaFin;
         this.minutoFin = minutoFin;
         this.aviso = false;
+        this.song = song;
         setTiempoFaltante();
     }
 
@@ -54,6 +57,16 @@ public class Evento implements Comparable<Evento>{
     public int getMinutoFin() {
         return minutoFin;
     }
+
+    public String getSong() {
+        return song;
+    }
+
+    public void setSong(String song) {
+        this.song = song;
+    }
+    
+    
 
     public void setMinutoFin(int minutoFin) {
         this.minutoFin = minutoFin;
@@ -107,7 +120,8 @@ public class Evento implements Comparable<Evento>{
                 +"\n\"horaFin\": \""+this.getHoraFin()+"\","
                 +"\n\"minutoFin\": \""+this.getMinutoFin()+"\","
                 +"\n\"isNotify\": \""+this.isIsNotify()+"\","
-                +"\n\"state\": \""+this.isState()+"\""
+                +"\n\"state\": \""+this.isState()+"\","
+                +"\n\"song\": \""+this.getSong()+"\""
                 +"\n}";
     }
     
@@ -151,10 +165,11 @@ public class Evento implements Comparable<Evento>{
     
     private void notificar(String mensaje){
         if(aviso==false) { 
-            ReminderApp.mp3Player.play();
+            Reproductor mp3Player = new Reproductor(this.song);
+            mp3Player.play();
             this.aviso=true;
             while(JOptionPane.showConfirmDialog(null, mensaje, "Alarma", 2, 1)==-1);   
-            ReminderApp.mp3Player.close();
+            mp3Player.close();
             this.aviso=false;
         }        
     }

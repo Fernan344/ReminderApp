@@ -2,6 +2,7 @@ package Db;
 
 import Alarma.Recordador;
 import Objects.Evento;
+import Utilities.Settings;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilePermission;
@@ -108,13 +109,21 @@ public class DB {
             
             for(Object arrObj: array){
                 JSONObject jObj = (JSONObject) arrObj;
+                
+                String song = Settings.getDefaultSong();
+                try{
+                    song = jObj.get("song").toString();
+                }catch(NullPointerException e){
+                    song = Settings.getDefaultSong();
+                }                               
+                
                 Evento ev = new Evento(jObj.get("nombre").toString()
                     , new Date(jObj.get("fechaInicio").toString())
                     , new Date(jObj.get("fechaFin").toString())
                     , Boolean.valueOf(jObj.get("isNotify").toString())
                     , Boolean.valueOf(jObj.get("state").toString())
                     , Integer.parseInt(jObj.get("horaFin").toString())
-                    , Integer.parseInt(jObj.get("minutoFin").toString()));
+                    , Integer.parseInt(jObj.get("minutoFin").toString()), song);
                 addEvent(ev);
             }               
             Collections.sort(eventos);     
@@ -124,7 +133,7 @@ public class DB {
             "\nNo se ha encontrado el archivo",
             "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
         } catch (ParseException ex) {
-            
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

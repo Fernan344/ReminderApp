@@ -6,7 +6,8 @@
 "horaFin": "23",
 "minutoFin": "59",
 "isNotify": "true",
-"state": "false"
+"state": "false",
+"song": "./public/Song.mp3"
 },{
 "nombre": "Tarea Lenguaje De Se�as",
 "fechaInicio": "Sat Feb 26 00:00:00 CST 2022",
@@ -14,7 +15,8 @@
 "horaFin": "23",
 "minutoFin": "59",
 "isNotify": "true",
-"state": "true"
+"state": "false",
+"song": "./public/Song.mp3"
 },{
 "nombre": "Nuevo evento de prueba",
 "fechaInicio": "Thu Mar 03 00:00:00 CST 2022",
@@ -22,7 +24,8 @@
 "horaFin": "0",
 "minutoFin": "0",
 "isNotify": "true",
-"state": "false"
+"state": "false",
+"song": "./public/Song.mp3"
 },{
 "nombre": "La economia y el covid en 2022",
 "fechaInicio": "Sat Feb 26 00:00:00 CST 2022",
@@ -30,7 +33,8 @@
 "horaFin": "23",
 "minutoFin": "59",
 "isNotify": "true",
-"state": "true"
+"state": "false",
+"song": "./public/Song.mp3"
 },{
 "nombre": "Practica 1 semi",
 "fechaInicio": "Fri Feb 25 00:00:00 CST 2022",
@@ -38,7 +42,8 @@
 "horaFin": "23",
 "minutoFin": "59",
 "isNotify": "true",
-"state": "true"
+"state": "false",
+"song": "./public/Song.mp3"
 },{
 "nombre": "Entrega Proyecto IA",
 "fechaInicio": "Thu Feb 24 00:00:00 CST 2022",
@@ -46,7 +51,8 @@
 "horaFin": "23",
 "minutoFin": "59",
 "isNotify": "true",
-"state": "false"
+"state": "false",
+"song": "./public/Song.mp3"
 },{
 "nombre": "Evaluacion Lenguaje de Se�as",
 "fechaInicio": "Sat Feb 26 00:00:00 CST 2022",
@@ -54,6 +60,7 @@
 "horaFin": "10",
 "minutoFin": "0",
 "isNotify": "true",
-"state": "true"
+"state": "true",
+"song": "./public/Song.mp3"
 }
 ]
