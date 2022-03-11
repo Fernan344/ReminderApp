@@ -10,6 +10,7 @@ import Utilities.LocalStorage;
 import Utilities.Storage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -27,6 +28,8 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();  
+        
+        setIconImage(new ImageIcon(getClass().getResource("../Recursos/reminder_cat_icon.png")).getImage());
         
         this.setDefaultCloseOperation(0);
         llenarTabla();

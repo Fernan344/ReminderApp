@@ -5,6 +5,7 @@
 package Objects;
 
 import Alarma.Reproductor;
+import Utilities.Settings;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -32,8 +33,14 @@ public class Evento implements Comparable<Evento>{
     private String tiempoFaltante;
     private boolean aviso;
     private String song;
+    
+    private int periodo;
+    private String descripcion;
+    private boolean isPeriodic;
 
-    public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify, boolean state, int horaFin, int minutoFin, String song) {
+    public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify
+            , boolean state, int horaFin, int minutoFin, String song, int periodo, String descripcion, boolean isPeriodic) {
+        
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -43,6 +50,9 @@ public class Evento implements Comparable<Evento>{
         this.minutoFin = minutoFin;
         this.aviso = false;
         this.song = song;
+        this.periodo = periodo;
+        this.descripcion = descripcion;
+        this.isPeriodic = isPeriodic;
         setTiempoFaltante();
     }
 
@@ -111,6 +121,39 @@ public class Evento implements Comparable<Evento>{
     public void setState(boolean state) {
         this.state = state;
     }
+
+    public boolean isAviso() {
+        return aviso;
+    }
+
+    public void setAviso(boolean aviso) {
+        this.aviso = aviso;
+    }
+
+    public int getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(int periodo) {
+        this.periodo = periodo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isIsPeriodic() {
+        return isPeriodic;
+    }
+
+    public void setIsPeriodic(boolean isPeriodic) {
+        this.isPeriodic = isPeriodic;
+    }    
+    
     
     public String toJson(){
         return "{"
@@ -121,7 +164,10 @@ public class Evento implements Comparable<Evento>{
                 +"\n\"minutoFin\": \""+this.getMinutoFin()+"\","
                 +"\n\"isNotify\": \""+this.isIsNotify()+"\","
                 +"\n\"state\": \""+this.isState()+"\","
-                +"\n\"song\": \""+this.getSong()+"\""
+                +"\n\"song\": \""+this.getSong()+"\","
+                +"\n\"descripcion\": \""+this.getDescripcion()+"\","
+                +"\n\"isPeriodic\": \""+this.isIsPeriodic()+"\","
+                +"\n\"periodo\": \""+this.getPeriodo()+"\""
                 +"\n}";
     }
     
@@ -164,7 +210,7 @@ public class Evento implements Comparable<Evento>{
     }
     
     private void notificar(String mensaje){
-        if(aviso==false) { 
+        if(!aviso && !Settings.getSilenciar()) { 
             Reproductor mp3Player = new Reproductor(this.song);
             mp3Player.play();
             this.aviso=true;

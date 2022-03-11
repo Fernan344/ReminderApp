@@ -115,7 +115,28 @@ public class DB {
                     song = jObj.get("song").toString();
                 }catch(NullPointerException e){
                     song = Settings.getDefaultSong();
-                }                               
+                }         
+                
+                String descripcion = "";
+                try{
+                    descripcion = jObj.get("descripcion").toString();
+                }catch(NullPointerException e){
+                    descripcion = "";
+                }
+                
+                boolean isPeriodic = false;
+                try{
+                    isPeriodic = Boolean.valueOf(jObj.get("isPeriodic").toString());
+                }catch(NullPointerException e){
+                    isPeriodic = false;
+                }
+                
+                int periodo = 0;
+                try{
+                    periodo = Integer.valueOf(jObj.get("isPeriodic").toString());
+                }catch(NullPointerException e){
+                    periodo = 0;
+                }
                 
                 Evento ev = new Evento(jObj.get("nombre").toString()
                     , new Date(jObj.get("fechaInicio").toString())
@@ -123,7 +144,11 @@ public class DB {
                     , Boolean.valueOf(jObj.get("isNotify").toString())
                     , Boolean.valueOf(jObj.get("state").toString())
                     , Integer.parseInt(jObj.get("horaFin").toString())
-                    , Integer.parseInt(jObj.get("minutoFin").toString()), song);
+                    , Integer.parseInt(jObj.get("minutoFin").toString())
+                    , song
+                    , periodo
+                    , descripcion
+                    , isPeriodic);
                 addEvent(ev);
             }               
             Collections.sort(eventos);     

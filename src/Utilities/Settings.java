@@ -25,7 +25,7 @@ import org.json.simple.parser.ParseException;
 public class Settings {
     private static String interfaz="Default";
     private static String defaultSong = "./public/Song.mp3";
-    private static boolean notificaciones = false;
+    private static boolean silenciar = false;
     private static String [] UIs = new String[] {"Default", "Oscuro", "Amarillo", "Azul", "Mint", "Aluminio", "Noire"};
     
     public static void cargarConfiguracion(){
@@ -66,12 +66,12 @@ public class Settings {
         
     }
     
-    public static boolean getNotificaciones(){
-        return notificaciones;
+    public static boolean getSilenciar(){
+        return silenciar;
     }
     
-    public static void turnNotificaciones(){
-        notificaciones = notificaciones ? false : true;
+    public static void turnSilenciar(){
+        silenciar = silenciar ? false : true;
     }
     
     public static String getDefaultSong(){

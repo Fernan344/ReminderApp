@@ -35,7 +35,7 @@ public class Settings extends javax.swing.JFrame {
     }
 
     private void cargarConfiguraciones(){
-        this.jCheckBox1.setSelected(Utilities.Settings.getNotificaciones());
+        this.jCheckBox1.setSelected(Utilities.Settings.getSilenciar());
         this.jComboBox1.setSelectedItem(Utilities.Settings.getUi());
     }
     
@@ -240,7 +240,7 @@ public class Settings extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jCheckBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseClicked
-        Utilities.Settings.turnNotificaciones();
+        Utilities.Settings.turnSilenciar();
     }//GEN-LAST:event_jCheckBox1MouseClicked
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
