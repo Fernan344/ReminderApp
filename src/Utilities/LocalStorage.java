@@ -29,6 +29,7 @@ public class LocalStorage {
     public static Storage getStorage(String nombre){
         for(Storage st: storage){
             if(st.getNombre().equals(nombre)){
+                storage.remove(st);
                 return st;
             }
         }

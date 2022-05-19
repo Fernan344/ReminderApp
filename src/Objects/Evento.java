@@ -176,10 +176,14 @@ public class Evento implements Comparable<Evento>{
     }
     
     public void setTiempoFaltante(){       
-        long l = this.getMilis();
+        long l = this.getMilis(this.getFechaFin());
         if(l<0){
-            this.state=false;
-            this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+            if(this.isIsPeriodic()){
+                this.nuevoFin();
+            }else{
+                this.state=false;
+                this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+            }
         }else{
             long day=l/(24*60*60*1000);
             long hour=(l/(60*60*1000)-day*24);
@@ -187,13 +191,12 @@ public class Evento implements Comparable<Evento>{
             long s=(l/1000-day*24*60*60-hour*60*60-min*60);
             this.tiempoFaltante = (day+" dias, "+hour+" horas, "+min+" minutos");
             if(this.isNotify && this.state) this.avisar(day, hour, min, s);
-        }
-          
+        }          
     }
     
-    public long getMilis(){
-        try {
-            String fechaLimite[] = getFechaString(this.getFechaFin().toInstant().toString()).split("-");
+    public long getMilis(Date fecha){
+        try {           
+            String fechaLimite[] = getFechaString(fecha.toInstant().toString()).split("-");
             String fechaActual[] = getFechaString(LocalDateTime.now().toString()).split("-");
             String horaActual[] = getTiempoActual(LocalDateTime.now().toString()).split(":");     
 
@@ -230,11 +233,27 @@ public class Evento implements Comparable<Evento>{
                 if(min==0) 
                     this.notificar("Ha Pasado 1 Hora para el evento: "+this.nombre+"\nTe Queda: "+this.tiempoFaltante);
             }else{
-                if(min==15 || min==30 || min==45 || min==0) 
+                if(min==15 || min==30 || min==45 || min==0) {
+                    if(min==0 && this.isIsPeriodic()){
+                        this.nuevoFin();
+                    }
                     this.notificar("Ha Pasado 15 Minutos para el evento: "+this.nombre+"\nTe Queda: "+this.tiempoFaltante);
+                }
+                    
             }
         }
     }    
+    
+    public void nuevoFin(){
+        if(this.getMilis(this.getFechaInicio())<=0){
+            this.state=false;
+            this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+        }else{
+            Date nuevoFin = this.getFechaFin();
+            nuevoFin.setTime(this.getFechaFin().getTime()+(24*60*60*1000*this.getPeriodo()));
+            this.state=true;
+        }
+    }
     
     public static String getTiempoActual(String d){
         return d.split("T")[1];
@@ -246,10 +265,10 @@ public class Evento implements Comparable<Evento>{
 
     @Override
     public int compareTo(Evento o) {
-        if (this.getMilis() < o.getMilis()) { 
+        if (this.getMilis(this.getFechaFin()) < o.getMilis(o.getFechaFin())) { 
             return -1; 
         } 
-        if (this.getMilis() > o.getMilis()) {
+        if (this.getMilis(this.getFechaFin()) > o.getMilis(o.getFechaFin())) {
             return 1; 
         } 
         return 0; 

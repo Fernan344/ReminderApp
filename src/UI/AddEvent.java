@@ -6,6 +6,8 @@ package UI;
 
 import Db.DB;
 import Objects.Evento;
+import Utilities.LocalStorage;
+import Utilities.Storage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -28,7 +30,10 @@ public class AddEvent extends javax.swing.JFrame {
         jCheckBox1.setSelected(true);
         this.setDefaultCloseOperation(0);
         jDateChooser1.setDateFormatString("MM/dd/YYYY");
+        jDateChooser2.setDateFormatString("MM/dd/YYYY");
         setLocationRelativeTo(null);
+        
+        isEditionMode();
     }
 
     /**
@@ -40,6 +45,7 @@ public class AddEvent extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -283,10 +289,16 @@ public class AddEvent extends javax.swing.JFrame {
         try {
             System.out.println(jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             System.out.println(LocalDateTime.now().toString());
-            fechaFin = new SimpleDateFormat("yyyy-MM-dd").parse(jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
             
-            if(isPeriodic) fechaInicio = new SimpleDateFormat("yyyy-MM-dd").parse(jDateChooser2.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
-            else fechaInicio = new SimpleDateFormat("yyyy-MM-dd").parse(LocalDateTime.now().toString().split("T")[0]);
+            
+            if(isPeriodic){
+                fechaInicio = new SimpleDateFormat("yyyy-MM-dd").parse(jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+                fechaFin = new SimpleDateFormat("yyyy-MM-dd").parse(jDateChooser2.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+            }
+            else {
+                fechaInicio = new SimpleDateFormat("yyyy-MM-dd").parse(LocalDateTime.now().toString().split("T")[0]);
+                fechaFin = new SimpleDateFormat("yyyy-MM-dd").parse(jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+            }
             
             String descripcion = jTextArea1.getText();
             String nombre = jTextField1.getText();
@@ -295,7 +307,10 @@ public class AddEvent extends javax.swing.JFrame {
             int minFin = jSpinField2.getValue();
             int periodo = jSpinField3.getValue();
 
-            DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic));
+            if(jButton1.getText().equals("Actualizar"))
+                DB.updateEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic), Integer.valueOf(String.valueOf(LocalStorage.getStorage("editIndex").getStorage())));
+            else DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic));
+           
             DB.saveEvent();
             this.dispose();            
             
@@ -318,7 +333,16 @@ public class AddEvent extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        JOptionPane.showMessageDialog(this, "Para Crear Un Evento Periodico, Debe indicar la cantidad de dias\n"
+                + "que desea para un intervalo de reinicio, por ejemplo, si usted desea un evento\n"
+                + "que sea diario, entonces indique que desea un dia, si desea que se reinicie cada 3 dias\n"
+                + "entonces indique 3 dias, y si es semanal, seria cada 7 dias.\n\n"
+                + "En la fecha de inicio usted indica que dia desea que comience el reinicio por ejemplo: \n"
+                + "Usted tiene un evento semanal los dias viernes, entonces indica como fecha inicial\n"
+                + "el proximo viernes.\n"
+                + "Para la fecha fin, usted debe indicar hasta cuando quiere que se acabe el ciclo, por ejemplo:\n"
+                + "Sus Eventos semanales de los viernes terminan en dos meses, indica cual va a ser el ultimo viernes\n"
+                + "de su evento. Todos los demas datos son iguales a un evento normal...");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void cambiarVisibilidad(boolean visibily){
@@ -328,6 +352,28 @@ public class AddEvent extends javax.swing.JFrame {
         jDateChooser2.setVisible(visibily);
         jLabel8.setVisible(visibily);
         jButton3.setVisible(visibily);
+    }
+    
+    private void isEditionMode(){
+        
+        Storage st = LocalStorage.getStorage("editEvent");
+        if(st!=null){
+            Evento ev = (Evento) st.getStorage();
+            
+            JOptionPane.showMessageDialog(this, "Estas En Modo Edicion de Eventos");
+            jButton1.setText("Actualizar");
+            
+            cambiarVisibilidad(ev.isIsPeriodic());
+            jTextField1.setText(ev.getNombre());
+            jTextArea1.setText(ev.getDescripcion());
+            jCheckBox2.setSelected(ev.isIsPeriodic());
+            jSpinField3.setValue(ev.getPeriodo());
+            jDateChooser2.setDate(ev.getFechaFin());
+            jDateChooser1.setDate(ev.isIsPeriodic() ? ev.getFechaInicio() : ev.getFechaFin());
+            jSpinField1.setValue(ev.getHoraFin());
+            jSpinField2.setValue(ev.getMinutoFin());
+            jCheckBox1.setSelected(ev.isIsNotify());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -350,6 +396,7 @@ public class AddEvent extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private com.toedter.components.JSpinField jSpinField1;
     private com.toedter.components.JSpinField jSpinField2;
     private com.toedter.components.JSpinField jSpinField3;

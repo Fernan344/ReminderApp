@@ -29,7 +29,7 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();  
         
-        setIconImage(new ImageIcon(getClass().getResource("../Recursos/reminder_cat_icon.png")).getImage());
+        setIconImage(new ImageIcon("./system/reminder_cat_icon.png").getImage());
         
         this.setDefaultCloseOperation(0);
         llenarTabla();
@@ -174,7 +174,25 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int fila = jTable1.getSelectedRow();
+        int columna = jTable1.getSelectedColumn();
         
+        if(columna == 0){
+            DefaultTableModel modelo = (DefaultTableModel) this.jTable1.getModel();
+            int index = Integer.valueOf(modelo.getValueAt(fila, 0).toString());
+            
+            Evento ev = DB.getEvent(index);
+            
+            JOptionPane.showMessageDialog(this, "Nombre: "+ev.getNombre()
+                +"\nDescripcion: "+ev.getDescripcion()
+                +"\nFecha Inicio: "+ (ev.isIsPeriodic() ? ev.getFechaFin().toString() : ev.getFechaInicio().toString())
+                +"\nFecha Fin: "+(ev.isIsPeriodic() ? ev.getFechaInicio().toString() : ev.getFechaFin().toString())
+                +"\nHora Fin: "+ev.getHoraFin()+":"+ev.getMinutoFin()
+                +"\nEs Periodico: "+(ev.isIsPeriodic() ? "Si.\nPeriodo: Cada "+ev.getPeriodo()+" dias." : "No.")
+                +"\nTiempo Faltante: "+ev.getTiempoFaltante()
+                +"\nNotificaciones: "+(ev.isIsNotify()? "Si." : "No.")
+            );
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -197,6 +215,9 @@ public class Principal extends javax.swing.JFrame {
             DefaultTableModel modelo = (DefaultTableModel) this.jTable1.getModel();
             int index = Integer.valueOf(modelo.getValueAt(fila, 0).toString());
             LocalStorage.addStorage("editEvent", Storage.tipos.Evento, DB.getEvent(index));
+            LocalStorage.addStorage("editIndex", Storage.tipos.Int, index);
+            AddEvent ae = new AddEvent();
+            ae.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(this, "No Se Ha Seleccionado Un Evento");
         } 

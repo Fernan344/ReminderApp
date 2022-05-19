@@ -54,6 +54,13 @@ public class DB {
         ReminderApp.pagina.llenarTabla();
     }
     
+    public static void updateEvent(Evento e, int index){
+        DB.eventos.remove(index);
+        DB.eventos.add(e);
+        Collections.sort(eventos);
+        ReminderApp.pagina.llenarTabla();
+    }
+    
     public static DefaultTableModel fillTable(){
         DefaultTableModel model = new DefaultTableModel(){
             @Override
@@ -133,7 +140,7 @@ public class DB {
                 
                 int periodo = 0;
                 try{
-                    periodo = Integer.valueOf(jObj.get("isPeriodic").toString());
+                    periodo = Integer.valueOf(jObj.get("periodo").toString());
                 }catch(NullPointerException e){
                     periodo = 0;
                 }
