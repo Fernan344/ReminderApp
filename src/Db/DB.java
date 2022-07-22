@@ -106,8 +106,7 @@ public class DB {
             
             if(!file.exists()){
                 file.createNewFile();
-            }
-            
+            }            
             
             file.setWritable(true, false);
             
