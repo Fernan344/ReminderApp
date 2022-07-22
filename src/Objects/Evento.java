@@ -4,6 +4,8 @@
  */
 package Objects;
 
+import Alarma.Reproductor;
+import Utilities.Settings;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,8 +32,15 @@ public class Evento implements Comparable<Evento>{
     private int minutoFin;
     private String tiempoFaltante;
     private boolean aviso;
+    private String song;
+    
+    private int periodo;
+    private String descripcion;
+    private boolean isPeriodic;
 
-    public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify, boolean state, int horaFin, int minutoFin) {
+    public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify
+            , boolean state, int horaFin, int minutoFin, String song, int periodo, String descripcion, boolean isPeriodic) {
+        
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -40,6 +49,10 @@ public class Evento implements Comparable<Evento>{
         this.horaFin = horaFin;
         this.minutoFin = minutoFin;
         this.aviso = false;
+        this.song = song;
+        this.periodo = periodo;
+        this.descripcion = descripcion;
+        this.isPeriodic = isPeriodic;
         setTiempoFaltante();
     }
 
@@ -54,6 +67,16 @@ public class Evento implements Comparable<Evento>{
     public int getMinutoFin() {
         return minutoFin;
     }
+
+    public String getSong() {
+        return song;
+    }
+
+    public void setSong(String song) {
+        this.song = song;
+    }
+    
+    
 
     public void setMinutoFin(int minutoFin) {
         this.minutoFin = minutoFin;
@@ -98,6 +121,39 @@ public class Evento implements Comparable<Evento>{
     public void setState(boolean state) {
         this.state = state;
     }
+
+    public boolean isAviso() {
+        return aviso;
+    }
+
+    public void setAviso(boolean aviso) {
+        this.aviso = aviso;
+    }
+
+    public int getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(int periodo) {
+        this.periodo = periodo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isIsPeriodic() {
+        return isPeriodic;
+    }
+
+    public void setIsPeriodic(boolean isPeriodic) {
+        this.isPeriodic = isPeriodic;
+    }    
+    
     
     public String toJson(){
         return "{"
@@ -107,7 +163,11 @@ public class Evento implements Comparable<Evento>{
                 +"\n\"horaFin\": \""+this.getHoraFin()+"\","
                 +"\n\"minutoFin\": \""+this.getMinutoFin()+"\","
                 +"\n\"isNotify\": \""+this.isIsNotify()+"\","
-                +"\n\"state\": \""+this.isState()+"\""
+                +"\n\"state\": \""+this.isState()+"\","
+                +"\n\"song\": \""+this.getSong()+"\","
+                +"\n\"descripcion\": \""+this.getDescripcion()+"\","
+                +"\n\"isPeriodic\": \""+this.isIsPeriodic()+"\","
+                +"\n\"periodo\": \""+this.getPeriodo()+"\""
                 +"\n}";
     }
     
@@ -116,10 +176,14 @@ public class Evento implements Comparable<Evento>{
     }
     
     public void setTiempoFaltante(){       
-        long l = this.getMilis();
+        long l = this.getMilis(this.getFechaFin());
         if(l<0){
-            this.state=false;
-            this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+            if(this.isIsPeriodic()){
+                this.nuevoFin();
+            }else{
+                this.state=false;
+                this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+            }
         }else{
             long day=l/(24*60*60*1000);
             long hour=(l/(60*60*1000)-day*24);
@@ -127,13 +191,12 @@ public class Evento implements Comparable<Evento>{
             long s=(l/1000-day*24*60*60-hour*60*60-min*60);
             this.tiempoFaltante = (day+" dias, "+hour+" horas, "+min+" minutos");
             if(this.isNotify && this.state) this.avisar(day, hour, min, s);
-        }
-          
+        }          
     }
     
-    public long getMilis(){
-        try {
-            String fechaLimite[] = getFechaString(this.getFechaFin().toInstant().toString()).split("-");
+    public long getMilis(Date fecha){
+        try {           
+            String fechaLimite[] = getFechaString(fecha.toInstant().toString()).split("-");
             String fechaActual[] = getFechaString(LocalDateTime.now().toString()).split("-");
             String horaActual[] = getTiempoActual(LocalDateTime.now().toString()).split(":");     
 
@@ -150,11 +213,12 @@ public class Evento implements Comparable<Evento>{
     }
     
     private void notificar(String mensaje){
-        if(aviso==false) { 
-            ReminderApp.mp3Player.play();
+        if(!aviso && !Settings.getSilenciar()) { 
+            Reproductor mp3Player = new Reproductor(this.song);
+            mp3Player.play();
             this.aviso=true;
             while(JOptionPane.showConfirmDialog(null, mensaje, "Alarma", 2, 1)==-1);   
-            ReminderApp.mp3Player.close();
+            mp3Player.close();
             this.aviso=false;
         }        
     }
@@ -169,11 +233,27 @@ public class Evento implements Comparable<Evento>{
                 if(min==0) 
                     this.notificar("Ha Pasado 1 Hora para el evento: "+this.nombre+"\nTe Queda: "+this.tiempoFaltante);
             }else{
-                if(min==15 || min==30 || min==45 || min==0) 
+                if(min==15 || min==30 || min==45 || min==0) {
+                    if(min==0 && this.isIsPeriodic()){
+                        this.nuevoFin();
+                    }
                     this.notificar("Ha Pasado 15 Minutos para el evento: "+this.nombre+"\nTe Queda: "+this.tiempoFaltante);
+                }
+                    
             }
         }
     }    
+    
+    public void nuevoFin(){
+        if(this.getMilis(this.getFechaInicio())<=0){
+            this.state=false;
+            this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+        }else{
+            Date nuevoFin = this.getFechaFin();
+            nuevoFin.setTime(this.getFechaFin().getTime()+(24*60*60*1000*this.getPeriodo()));
+            this.state=true;
+        }
+    }
     
     public static String getTiempoActual(String d){
         return d.split("T")[1];
@@ -185,10 +265,10 @@ public class Evento implements Comparable<Evento>{
 
     @Override
     public int compareTo(Evento o) {
-        if (this.getMilis() < o.getMilis()) { 
+        if (this.getMilis(this.getFechaFin()) < o.getMilis(o.getFechaFin())) { 
             return -1; 
         } 
-        if (this.getMilis() > o.getMilis()) {
+        if (this.getMilis(this.getFechaFin()) > o.getMilis(o.getFechaFin())) {
             return 1; 
         } 
         return 0; 

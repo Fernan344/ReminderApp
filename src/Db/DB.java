@@ -2,6 +2,7 @@ package Db;
 
 import Alarma.Recordador;
 import Objects.Evento;
+import Utilities.Settings;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilePermission;
@@ -16,6 +17,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.simple.JSONArray;
@@ -49,6 +54,13 @@ public class DB {
         ReminderApp.pagina.llenarTabla();
     }
     
+    public static void updateEvent(Evento e, int index){
+        DB.eventos.remove(index);
+        DB.eventos.add(e);
+        Collections.sort(eventos);
+        ReminderApp.pagina.llenarTabla();
+    }
+    
     public static DefaultTableModel fillTable(){
         DefaultTableModel model = new DefaultTableModel(){
             @Override
@@ -64,14 +76,13 @@ public class DB {
         model.addColumn("Hora Fin");
         model.addColumn("Tiempo Falta");
         model.addColumn("Notificacion");
-        model.addColumn("Eliminar");
         
         for(int i=0; i<eventos.size(); i++){
             Evento evento = eventos.get(i);
             if(evento.isState())
                 model.addRow(new Object[]{i, evento.getNombre()
                     , evento.getFechaFin().toInstant().toString().split("T")[0] , (evento.getHoraFin()+":"+evento.getMinutoFin()), evento.getTiempoFaltante(), evento.isIsNotify() ? "Notificaciones":"Sin Notificaciones"
-                    , "Click Para Eliminar"});
+                    });
         }
 
         return model;
@@ -95,8 +106,7 @@ public class DB {
             
             if(!file.exists()){
                 file.createNewFile();
-            }
-            
+            }            
             
             file.setWritable(true, false);
             
@@ -105,13 +115,46 @@ public class DB {
             
             for(Object arrObj: array){
                 JSONObject jObj = (JSONObject) arrObj;
+                
+                String song = Settings.getDefaultSong();
+                try{
+                    song = jObj.get("song").toString();
+                }catch(NullPointerException e){
+                    song = Settings.getDefaultSong();
+                }         
+                
+                String descripcion = "";
+                try{
+                    descripcion = jObj.get("descripcion").toString();
+                }catch(NullPointerException e){
+                    descripcion = "";
+                }
+                
+                boolean isPeriodic = false;
+                try{
+                    isPeriodic = Boolean.valueOf(jObj.get("isPeriodic").toString());
+                }catch(NullPointerException e){
+                    isPeriodic = false;
+                }
+                
+                int periodo = 0;
+                try{
+                    periodo = Integer.valueOf(jObj.get("periodo").toString());
+                }catch(NullPointerException e){
+                    periodo = 0;
+                }
+                
                 Evento ev = new Evento(jObj.get("nombre").toString()
                     , new Date(jObj.get("fechaInicio").toString())
                     , new Date(jObj.get("fechaFin").toString())
                     , Boolean.valueOf(jObj.get("isNotify").toString())
                     , Boolean.valueOf(jObj.get("state").toString())
                     , Integer.parseInt(jObj.get("horaFin").toString())
-                    , Integer.parseInt(jObj.get("minutoFin").toString()));
+                    , Integer.parseInt(jObj.get("minutoFin").toString())
+                    , song
+                    , periodo
+                    , descripcion
+                    , isPeriodic);
                 addEvent(ev);
             }               
             Collections.sort(eventos);     
@@ -121,7 +164,7 @@ public class DB {
             "\nNo se ha encontrado el archivo",
             "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
         } catch (ParseException ex) {
-            
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

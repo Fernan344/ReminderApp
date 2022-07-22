@@ -16,8 +16,8 @@ public class Reproductor {
     private final String mp3FileToPlay;
     private Player jlPlayer;
 
-    public Reproductor() {
-        this.mp3FileToPlay = "./public/Song.mp3";
+    public Reproductor(String path) {
+        this.mp3FileToPlay = path;
     }
 
     public void play() {
@@ -28,6 +28,7 @@ public class Reproductor {
         } catch (Exception e) {
             System.out.println("Problem playing mp3 file " + mp3FileToPlay);
             System.out.println(e.getMessage());
+            System.out.println(e);
         }
 
         new Thread() {
