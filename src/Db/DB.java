@@ -24,7 +24,7 @@ import reminderapp.ReminderApp;
 
 
 public class DB {
-    private static ArrayList<Evento> eventos = new ArrayList<Evento>(); 
+    private static ArrayList<Evento> eventos = new ArrayList<Evento>();
 
     public DB() {
     }
@@ -136,8 +136,6 @@ public class DB {
                 }catch(NullPointerException e){
                     periodo = 0;
                 }
-                
-                System.out.println(descripcion);
                 
                 Evento ev = new Evento(jObj.get("nombre").toString()
                     , new Date(jObj.get("fechaInicio").toString())
