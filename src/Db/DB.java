@@ -5,22 +5,15 @@ import Objects.Evento;
 import Utilities.Settings;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilePermission;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.AccessController;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.simple.JSONArray;
@@ -31,7 +24,7 @@ import reminderapp.ReminderApp;
 
 
 public class DB {
-    private static ArrayList<Evento> eventos = new ArrayList<Evento>(); 
+    private static ArrayList<Evento> eventos = new ArrayList<Evento>();
 
     public DB() {
     }
@@ -181,10 +174,19 @@ public class DB {
                 }
             }
             json+="\n]";
+            
+            File file = new File("./public/Events.json");
+            if (! file.getParentFile().exists()) {// Si el directorio principal no existe, cree el directorio principal
+                file.getParentFile().mkdirs();
+            }
+            if (!file.exists()) {// Si ya existe, elimine el archivo anterior
+                file.createNewFile();
+            }
 
-            FileOutputStream fos = new FileOutputStream("./public/Events.json");
-            fos.write(json.getBytes());
-            fos.close();
+            Writer write = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+            write.write(json);
+            write.flush();
+            write.close();
         } catch (IOException ex) {
             System.out.println("ASDfasdfasdf");
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);

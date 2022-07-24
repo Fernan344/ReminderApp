@@ -165,7 +165,7 @@ public class Evento implements Comparable<Evento>{
                 +"\n\"isNotify\": \""+this.isIsNotify()+"\","
                 +"\n\"state\": \""+this.isState()+"\","
                 +"\n\"song\": \""+this.getSong()+"\","
-                +"\n\"descripcion\": \""+this.getDescripcion()+"\","
+                +"\n\"descripcion\": \""+this.getDescripcion().replace("\n", "\\n")+"\","
                 +"\n\"isPeriodic\": \""+this.isIsPeriodic()+"\","
                 +"\n\"periodo\": \""+this.getPeriodo()+"\""
                 +"\n}";
