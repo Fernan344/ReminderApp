@@ -4,7 +4,7 @@
  */
 package Utilities;
 
-import UI.LookManager;
+import UI.Utils.LookManager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

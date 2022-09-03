@@ -21,7 +21,7 @@ public class Recordador extends Thread{
     
     public void run(){
         try{
-            for(int i=0; i<lapso*60; i++){
+            for(int i=0; i<10/*lapso*60*/; i++){
                 TimeUnit.SECONDS.sleep(1);
                 System.out.println(i);
             }
@@ -29,7 +29,8 @@ public class Recordador extends Thread{
             DB.verificacion();
         }catch(Exception e){
             System.out.println("Error en el hilo De Verificacion");
-            this.start();
+            throw new Error(e);
+            //this.start();
         }
     }
 }

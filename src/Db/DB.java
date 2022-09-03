@@ -53,34 +53,7 @@ public class DB {
         Collections.sort(eventos);
         ReminderApp.pagina.llenarTabla();
     }
-    
-    public static DefaultTableModel fillTable(){
-        DefaultTableModel model = new DefaultTableModel(){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-               //all cells false
-               return false;
-            }
-        };
-        
-        model.addColumn("ID");
-        model.addColumn("Evento");
-        model.addColumn("Fecha Fin");
-        model.addColumn("Hora Fin");
-        model.addColumn("Tiempo Falta");
-        model.addColumn("Notificacion");
-        
-        for(int i=0; i<eventos.size(); i++){
-            Evento evento = eventos.get(i);
-            if(evento.isState())
-                model.addRow(new Object[]{i, evento.getNombre()
-                    , evento.getFechaFin().toInstant().toString().split("T")[0] , (evento.getHoraFin()+":"+evento.getMinutoFin()), evento.getTiempoFaltante(), evento.isIsNotify() ? "Notificaciones":"Sin Notificaciones"
-                    });
-        }
-
-        return model;
-    }
-    
+   
     public static void verificacion(){
         Thread hilo = new Recordador("Recordatorio");
         hilo.start();        
@@ -148,9 +121,9 @@ public class DB {
                     , periodo
                     , descripcion
                     , isPeriodic);
-                addEvent(ev);
+                DB.eventos.add(ev);   
             }               
-            Collections.sort(eventos);     
+            Collections.sort(eventos); 
             ReminderApp.pagina.llenarTabla();
         }catch(IOException ex){
             JOptionPane.showMessageDialog(null,ex+"" +
