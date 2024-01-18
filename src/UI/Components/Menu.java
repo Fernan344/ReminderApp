@@ -34,6 +34,7 @@ public class Menu extends javax.swing.JPanel {
         scrollPane.setViewportBorder(null);
         scrollPane.setBorder(null);   
         scrollPane.setVerticalScrollBar(new CustomScrollBar());
+        menuPanel.setOpaque(false);
         menuPanel.setLayout(new MigLayout("wrap, fillx, inset 0", "[fill]"));
         TimingTarget target = new TimingTargetAdapter(){
             @Override
@@ -55,7 +56,7 @@ public class Menu extends javax.swing.JPanel {
         split("EVENTOS");
         addMenu("add.png", "Crear Evento", 0);
         addMenu("events.png", "Mis Eventos", 1);
-        addMenu("events.png", "Eventos Retrasados", 2);
+        addMenu("retrased.png", "Eventos Retrasados", 2);
         split("PREFERENCIAS");
         addMenu("settings.png", "Configuraciones", 3);
         addMenu("advanced.png", "Avanzado", 4);        
@@ -120,7 +121,7 @@ public class Menu extends javax.swing.JPanel {
         menuPanel = new javax.swing.JPanel();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/reminder_cat_icon.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\teval\\OneDrive\\Documentos\\NetBeansProjects\\ReminderApp\\system\\reminder_cat_icon.png")); // NOI18N
         jLabel1.setText("ReminderApp");
 
         menuPanel.setOpaque(false);
@@ -133,7 +134,7 @@ public class Menu extends javax.swing.JPanel {
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGap(0, 539, Short.MAX_VALUE)
         );
 
         scrollPane.setViewportView(menuPanel);
@@ -144,8 +145,10 @@ public class Menu extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
-            .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,9 +164,7 @@ public class Menu extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

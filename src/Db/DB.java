@@ -24,7 +24,8 @@ import reminderapp.ReminderApp;
 
 
 public class DB {
-    private static ArrayList<Evento> eventos = new ArrayList<Evento>();
+    private static ArrayList<Evento> eventos;
+    private static ArrayList<Evento> retrased;
 
     public DB() {
     }
@@ -33,8 +34,23 @@ public class DB {
         return eventos;
     }
     
-    public static Evento getEvent(int index){
-        return eventos.get(index);
+    public static ArrayList<Evento> getEventosRetrasados() {
+        return retrased;
+    }
+    
+    public static Evento getEvent(int index, String list){
+        return list.equals("actuals")?eventos.get(index):retrased.get(index);
+    }
+    
+    public static void confirmEvent(int index, String list){
+        getEvent(index, list).confirmEvent();
+        if(list.equals("actuals"))eventIsRetrased(getEvent(index, list), index);
+    }
+    
+    public static void eventIsRetrased(Evento evt, int i){
+        DB.eventos.remove(i);
+        DB.retrased.add(evt);
+        ReminderApp.retrasados.llenarTabla();
     }
 
     public static void setEventos(ArrayList<Evento> eventos) {
@@ -42,14 +58,34 @@ public class DB {
     }
     
     public static void addEvent(Evento e){
-        DB.eventos.add(e);        
-        Collections.sort(eventos);
-        ReminderApp.pagina.llenarTabla();
+        if(e.setTiempoFaltante()){
+            DB.retrased.add(e);
+            ReminderApp.retrasados.llenarTabla();
+        }
+        else {
+            DB.eventos.add(e);
+            Collections.sort(eventos);
+            ReminderApp.pagina.llenarTabla();
+        }        
     }
     
-    public static void updateEvent(Evento e, int index){
-        DB.eventos.remove(index);
-        DB.eventos.add(e);
+    public static void updateEvent(Evento e, int index, String origin){
+        if(origin.equals("actuals"))
+            if(e.setTiempoFaltante()) eventIsRetrased(e, index);
+            else {
+                DB.eventos.remove(index);
+                DB.eventos.add(e);
+            }
+        else{
+            if(e.setTiempoFaltante()){
+                DB.retrased.remove(index);
+                DB.retrased.add(e);
+            }else{
+                DB.retrased.remove(index);
+                DB.eventos.add(e);               
+            }
+             ReminderApp.retrasados.llenarTabla();
+        }
         Collections.sort(eventos);
         ReminderApp.pagina.llenarTabla();
     }
@@ -57,15 +93,21 @@ public class DB {
     public static void verificacion(){
         Thread hilo = new Recordador("Recordatorio");
         hilo.start();        
-        
+        boolean hasRetrased = false;
         for(int i=0; i<DB.getEventos().size(); i++){
-            eventos.get(i).setTiempoFaltante();
+            if(eventos.get(i).setTiempoFaltante()){
+                eventIsRetrased(eventos.get(i), i); 
+                hasRetrased = true;
+            }            
         }        
-        ReminderApp.pagina.llenarTabla();   
+        if(hasRetrased) ReminderApp.retrasados.llenarTabla();
+        ReminderApp.pagina.llenarTabla();       
         DB.saveEvent();    
     }   
     
-    public static void initEvents(){
+    public static boolean initEvents(){
+        eventos = new ArrayList<Evento>();
+        retrased = new ArrayList<Evento>();
         JSONParser parser = new JSONParser();
         try{
             File file = new File("./public/Events.json");
@@ -89,48 +131,70 @@ public class DB {
                     song = Settings.getDefaultSong();
                 }         
                 
-                String descripcion = "";
+                String descripcion;
                 try{
                     descripcion = jObj.get("descripcion").toString();
                 }catch(NullPointerException e){
                     descripcion = "";
                 }
                 
-                boolean isPeriodic = false;
+                boolean isPeriodic;
                 try{
                     isPeriodic = Boolean.valueOf(jObj.get("isPeriodic").toString());
                 }catch(NullPointerException e){
                     isPeriodic = false;
                 }
                 
-                int periodo = 0;
+                int periodo;
                 try{
                     periodo = Integer.valueOf(jObj.get("periodo").toString());
                 }catch(NullPointerException e){
                     periodo = 0;
                 }
                 
+                boolean state;                
+                try{
+                    state = Boolean.valueOf(jObj.get("state").toString());
+                }catch(NullPointerException e){
+                    state = true;
+                }
+                
+                boolean confirmed;
+                try{
+                    confirmed = Boolean.valueOf(jObj.get("isConfirmed").toString());
+                }catch(NullPointerException e){
+                    confirmed = !state;
+                }
+                
                 Evento ev = new Evento(jObj.get("nombre").toString()
                     , new Date(jObj.get("fechaInicio").toString())
                     , new Date(jObj.get("fechaFin").toString())
                     , Boolean.valueOf(jObj.get("isNotify").toString())
-                    , Boolean.valueOf(jObj.get("state").toString())
+                    , state
                     , Integer.parseInt(jObj.get("horaFin").toString())
                     , Integer.parseInt(jObj.get("minutoFin").toString())
                     , song
                     , periodo
                     , descripcion
-                    , isPeriodic);
-                DB.eventos.add(ev);   
+                    , isPeriodic
+                    , confirmed);
+                boolean eventRetrased = ev.setTiempoFaltante();
+                if(eventRetrased) DB.retrased.add(ev);
+                else DB.eventos.add(ev);                 
             }               
             Collections.sort(eventos); 
+            Collections.sort(retrased);
             ReminderApp.pagina.llenarTabla();
+            ReminderApp.retrasados.llenarTabla();
+            return true;
         }catch(IOException ex){
             JOptionPane.showMessageDialog(null,ex+"" +
             "\nNo se ha encontrado el archivo",
             "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
+            return false;
         } catch (ParseException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
     
@@ -146,6 +210,17 @@ public class DB {
                     json+=",";
                 }
             }
+            if(!retrased.isEmpty())json+=",";
+            
+            for(int i=0; i< retrased.size(); i++){
+                Evento e = retrased.get(i);
+                json += e.toJson();
+                
+                if(i!=retrased.size()-1){
+                    json+=",";
+                }
+            }
+            
             json+="\n]";
             
             File file = new File("./public/Events.json");

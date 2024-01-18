@@ -5,6 +5,7 @@
 package Alarma;
 
 import Db.DB;
+import Utilities.Settings;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -12,24 +13,22 @@ import java.util.concurrent.TimeUnit;
  *
  * @author teval
  */
-public class Recordador extends Thread{
+public class SettingsVerify extends Thread{
     private int lapso = 1;
    
-    public Recordador(String parametros){
+    public SettingsVerify(String parametros, int lapso){
         super(parametros);
+        this.lapso = lapso;
     }
     
     public void run(){
         try{
             for(int i=0; i<lapso*60; i++){
                 TimeUnit.SECONDS.sleep(1);
-                System.out.println(i);
+                System.out.println("i: "+i);
             }            
-            DB.verificacion();
+            Settings.turnSilenciar();
         }catch(Exception e){
-            System.out.println("Error en el hilo De Verificacion");
-            throw new Error(e);
-            //this.start();
         }
     }
 }

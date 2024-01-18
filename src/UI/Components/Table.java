@@ -6,14 +6,20 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author teval
  */
-public class Table extends TableCustom{
+public class Table extends TableCustom implements Cloneable{
 
     public Table() {
+        
+    }
+    
+    public Table clone() throws CloneNotSupportedException{
+        return (Table)super.clone();
     }
     
     public void addTableStyle(JScrollPane scroll) {
@@ -43,4 +49,24 @@ public class Table extends TableCustom{
         return com;
     } 
     
+    public void redimensionTable(){
+        TableColumnModel columnModel = this.getColumnModel();
+        //if(editMode){
+        columnModel.getColumn(0).setPreferredWidth(10);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(25);
+        columnModel.getColumn(4).setPreferredWidth(150);
+        columnModel.getColumn(5).setPreferredWidth(85);
+        columnModel.getColumn(6).setPreferredWidth(50);
+        /*}else{
+            columnModel.getColumn(0).setPreferredWidth(10);
+            columnModel.getColumn(1).setPreferredWidth(150);
+            columnModel.getColumn(2).setPreferredWidth(50);
+            columnModel.getColumn(3).setPreferredWidth(25);
+            columnModel.getColumn(4).setPreferredWidth(150);
+            columnModel.getColumn(5).setPreferredWidth(85);
+            columnModel.getColumn(6).setPreferredWidth(50);
+        }*/
+    }  
 }

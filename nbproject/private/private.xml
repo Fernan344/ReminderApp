@@ -2,6 +2,27 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/NonConfirmatedEvents.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/Configurations.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/CreateEvent.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Models/ModelStaff.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/Main.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Components/Menu.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/reminderapp/ReminderApp.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Components/CellAction.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/Alarma/Recordador.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/ImportData.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Components/CustomTableHeader.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/Objects/Evento.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/Alarma/SettingsVerify.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/AdvancedOptions.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/AllEvents.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/Db/DB.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Components/Table.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/Utilities/Settings.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Components/FileChooser.java</file>
+            <file>file:/C:/Users/teval/OneDrive/Documentos/NetBeansProjects/ReminderApp/src/UI/Pages/ExportData.java</file>
+        </group>
     </open-files>
 </project-private>

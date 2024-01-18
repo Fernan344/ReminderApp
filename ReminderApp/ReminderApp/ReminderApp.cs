@@ -11,7 +11,7 @@ namespace ReminderApp
     {
         static int Main(string[] args)
         {
-            Executor.Executor.ExecuteCommand("START /B \"\" > \"%cd%\\jdk-18.0.2\bin\\java.exe\" > -jar \"ReminderApp.jar\"");
+            Executor.Executor.ExecuteCommand("START /B \"\" > \"%cd%\\java\bin\\java.exe\" > -jar \"ReminderApp.jar\"");
             return 0;
         }
     }

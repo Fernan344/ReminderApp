@@ -4,14 +4,16 @@
  */
 package UI.Components;
 
+import Db.DB;
+import Utilities.LocalStorage;
+import Utilities.Storage;
 import com.raven.table.TableCustom;
 import com.raven.table.cell.TableCustomCell;
 import com.raven.table.model.TableRowData;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
-import javax.swing.table.TableColumnModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,44 +32,44 @@ public class CellAction extends TableCustomCell {
         cmdEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(data.isEditing()){
-                    table.cancelEditRowAt(row);
-                    cmdEdit.setIcon(new ImageIcon(getClass().getResource("/Recursos/edit.png")));
-                    redimensionTable(table, false);
-                }else{
-                    table.editRowAt(row);
-                    cmdEdit.setIcon(new ImageIcon(getClass().getResource("/Recursos/cancel.png")));
-                    redimensionTable(table, true);
-                }
+                int index = Integer.valueOf(table.getValueAt(row, 0).toString());
+                LocalStorage.addStorage("editEvent", Storage.tipos.Evento, table.getName().equals("NonConfirmEvents")?DB.getEvent(index, "retrased"):DB.getEvent(index, "actuals"));
+                LocalStorage.addStorage("editIndex", Storage.tipos.Int, index);
+                LocalStorage.addStorage("editTableOrigin", Storage.tipos.String, table.getName().equals("NonConfirmEvents")?"retrased":"actuals");
+                reminderapp.ReminderApp.principal.setPage("CreateEvent");
             }
         });
         cmdDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                table.deleteRowAt(getRow(), true);
+                int index = Integer.valueOf(table.getValueAt(row, 0).toString());
+                if(JOptionPane.showConfirmDialog(reminderapp.ReminderApp.principal, "Desea Confirmar El Evento?", "Confirmar", 2, 2)==0){
+                    DB.confirmEvent(index, table.getName().equals("NonConfirmEvents")?"retrased":"actuals");
+                    table.deleteRowAt(getRow(), true);
+                }               
             }
         });
     }
     
-    private void checkIcon(TableRowData data, TableCustom table){
+    /*private void checkIcon(TableRowData data, TableCustom table){
         if(data.isEditing()){
-            cmdEdit.setIcon(new ImageIcon(getClass().getResource("/Recursos/cancel.png")));             
+            cmdEdit.setIcon(new ImageIcon(getClass().getResource("/Recursos/edit.png")));             
         }else{
             cmdEdit.setIcon(new ImageIcon(getClass().getResource("/Recursos/edit.png")));            
         }
-    }
+    }*/
     
-    private void redimensionTable(TableCustom table, boolean editMode){
+    /*private void redimensionTable(TableCustom table){
         TableColumnModel columnModel = table.getColumnModel();
-        if(editMode){
-            columnModel.getColumn(0).setPreferredWidth(10);
-            columnModel.getColumn(1).setPreferredWidth(150);
-            columnModel.getColumn(2).setPreferredWidth(125);
-            columnModel.getColumn(3).setPreferredWidth(100);
-            columnModel.getColumn(4).setPreferredWidth(25);
-            columnModel.getColumn(5).setPreferredWidth(75);
-            columnModel.getColumn(6).setPreferredWidth(50);
-        }else{
+        //if(editMode){
+        columnModel.getColumn(0).setPreferredWidth(10);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(25);
+        columnModel.getColumn(4).setPreferredWidth(150);
+        columnModel.getColumn(5).setPreferredWidth(85);
+        columnModel.getColumn(6).setPreferredWidth(50);
+        /*}else{
             columnModel.getColumn(0).setPreferredWidth(10);
             columnModel.getColumn(1).setPreferredWidth(150);
             columnModel.getColumn(2).setPreferredWidth(50);
@@ -76,7 +78,7 @@ public class CellAction extends TableCustomCell {
             columnModel.getColumn(5).setPreferredWidth(85);
             columnModel.getColumn(6).setPreferredWidth(50);
         }
-    }
+    }*/
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -144,7 +146,7 @@ public class CellAction extends TableCustomCell {
     @Override
     public Component createComponentCellRender(TableCustom table, TableRowData data, int row, int column) {
         CellAction cell = new CellAction();
-        cell.checkIcon(data, table);
+        //cell.checkIcon(data, table);
         cell.addEvent(table, data, row);
         return cell;
     }
@@ -157,7 +159,7 @@ public class CellAction extends TableCustomCell {
     @Override
     public TableCustomCell createComponentCellEditor(TableCustom tc, TableRowData trd, Object o, int row, int column) {
         CellAction cell = new CellAction();
-        cell.checkIcon(trd, tc);
+        //cell.checkIcon(trd, tc);
         cell.addEvent(tc, trd, row);
         return cell;
     }

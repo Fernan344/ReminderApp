@@ -10,14 +10,12 @@ import UI.Components.CellAction;
 import UI.Components.CellFecha;
 import UI.Components.CellHora;
 import UI.Components.CellName;
+import UI.Components.Table;
 import UI.Models.ModelStaff;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -35,15 +33,21 @@ public class NonConfirmatedEvents extends javax.swing.JPanel {
         table1.addTableStyle(jScrollPane1); 
     }
     
-    public void initTable(){
+    private void initTable(){
         table1.setModel(new DefaultTableModel(
             null ,
             new String [] {
                 "ID", "EVENTO", "FECHA FIN", "HORA FIN", "TIEMPO", "NOTIFICACIONES", "ACTIONS"
             }
-        ));
+        ){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               //all cells false
+               if(column==6) return true;
+               return false;
+            }
+        });
         
-        DefaultTableModel modelo=(DefaultTableModel) table1.getModel();
         int cols=table1.getColumnCount();       
         
         DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
@@ -51,40 +55,28 @@ public class NonConfirmatedEvents extends javax.swing.JPanel {
         
         for (int i = 0;i<cols; i++) {
             table1.getColumnModel().getColumn(i).setCellRenderer(tcr);
+            
         }
-        
-        table1.addTableCell(new CellName(), 1);
-        table1.addTableCell(new CellFecha(), 2);
-        table1.addTableCell(new CellHora(), 3);
         table1.addTableCell(new CellAction(), 6);
+        table1.setName("NonConfirmEvents");
+        table1.redimensionTable();
     }
     
     public void llenarTabla(){       
-        
-        ArrayList <Evento> evts = DB.getEventos();         
-        
+        //llenar primero la tabla y despues limpiar los datos viejos
+        ArrayList <Evento> evts = DB.getEventosRetrasados();  
+        System.out.println(evts.size());
         limpiarTabla();
-        
         for(int i=0; i<evts.size(); i++){
             Evento evento = evts.get(i);
-            if(evento.isState()){
-                table1.addRow(new ModelStaff(String.valueOf(0), evento.getNombre(), String.valueOf(evento.getFechaFin()), String.valueOf(evento.getHoraFin()), evento.getTiempoFaltante(), evento.isIsNotify() ? "Notificaciones":"Sin Notificaciones"), false);
+            if(!evento.isState() && !evento.isConfirmed()){                
+                table1.addRow(new ModelStaff(String.valueOf(i), evento.getNombre(), evento.getFechaFin().toInstant().toString().split("T")[0], evento.parseTimeToString(), evento.getTiempoFaltante(), evento.isIsNotify() ? "Notificaciones":"Sin Notificaciones"), false);
             }
-        }                               
+        } 
     }
     
     public void limpiarTabla(){
-        try {
-            
-            DefaultTableModel modelo=(DefaultTableModel) table1.getModel();
-            int filas=table1.getRowCount();
-            for (int i = 0;i<filas; i++) {
-                modelo.removeRow(0);
-            }
-        } catch (Exception e) {
-            System.out.println("Error al limpiar tabla");
-            throw new Error(e);
-        }
+        initTable();
     }
 
     /**

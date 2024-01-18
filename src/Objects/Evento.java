@@ -33,13 +33,15 @@ public class Evento implements Comparable<Evento>{
     private String tiempoFaltante;
     private boolean aviso;
     private String song;
+    private boolean confirmed;
     
     private int periodo;
     private String descripcion;
     private boolean isPeriodic;
 
     public Evento(String nombre, Date fechaInicio, Date fechaFin, boolean isNotify
-            , boolean state, int horaFin, int minutoFin, String song, int periodo, String descripcion, boolean isPeriodic) {
+            , boolean state, int horaFin, int minutoFin, String song, int periodo, String descripcion, boolean isPeriodic
+            , boolean confirmed) {
         
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
@@ -53,11 +55,21 @@ public class Evento implements Comparable<Evento>{
         this.periodo = periodo;
         this.descripcion = descripcion;
         this.isPeriodic = isPeriodic;
-        setTiempoFaltante();
+        this.confirmed = confirmed;
     }
 
     public int getHoraFin() {
         return horaFin;
+    }
+ 
+    public String parseTimeToString(){
+        String auxHora = String.valueOf(horaFin);
+        String auxMin = String.valueOf(minutoFin);
+        
+        if(auxHora.length()==1) auxHora = "0"+auxHora;
+        if(auxMin.length()==1) auxMin = "0"+auxMin;
+        
+        return auxHora+":"+auxMin;
     }
 
     public void setHoraFin(int horaFin) {
@@ -75,8 +87,14 @@ public class Evento implements Comparable<Evento>{
     public void setSong(String song) {
         this.song = song;
     }
-    
-    
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
+    }   
 
     public void setMinutoFin(int minutoFin) {
         this.minutoFin = minutoFin;
@@ -167,6 +185,7 @@ public class Evento implements Comparable<Evento>{
                 +"\n\"song\": \""+this.getSong()+"\","
                 +"\n\"descripcion\": \""+this.getDescripcion().replace("\n", "\\n")+"\","
                 +"\n\"isPeriodic\": \""+this.isIsPeriodic()+"\","
+                +"\n\"isConfirmed\": \""+this.isConfirmed()+"\","
                 +"\n\"periodo\": \""+this.getPeriodo()+"\""
                 +"\n}";
     }
@@ -175,14 +194,16 @@ public class Evento implements Comparable<Evento>{
         return this.tiempoFaltante;
     }
     
-    public void setTiempoFaltante(){       
+    public boolean setTiempoFaltante(){       
         long l = this.getMilis(this.getFechaFin());
         if(l<0){
             if(this.isIsPeriodic()){
                 this.nuevoFin();
+                return false;
             }else{
                 this.state=false;
                 this.tiempoFaltante="0 dias, 0 horas, 0 minutos";
+                return true;
             }
         }else{
             long day=l/(24*60*60*1000);
@@ -190,7 +211,8 @@ public class Evento implements Comparable<Evento>{
             long min=((l/(60*1000))-day*24*60-hour*60);
             long s=(l/1000-day*24*60*60-hour*60*60-min*60);
             this.tiempoFaltante = (day+" dias, "+hour+" horas, "+min+" minutos");
-            if(this.isNotify && this.state) this.avisar(day, hour, min, s);
+            if(this.isNotify && this.state && !Settings.getSilenciar()) this.avisar(day, hour, min, s);
+            return false;
         }          
     }
     
@@ -213,7 +235,7 @@ public class Evento implements Comparable<Evento>{
     }
     
     private void notificar(String mensaje){
-        if(!aviso && !Settings.getSilenciar()) { 
+        if(!aviso ) { 
             Reproductor mp3Player = new Reproductor(this.song);
             mp3Player.play();
             this.aviso=true;
@@ -224,7 +246,6 @@ public class Evento implements Comparable<Evento>{
     }
     
     private void avisar(long day, long hour, long min, long s){
-        System.out.println(day+"--"+hour+"--"+min);
         if(day!=0){
             if((hour==0 || hour==12) && min==0)
                 this.notificar("Han Pasado 12 Horas para el evento: "+this.nombre+"\nTe Queda: "+this.tiempoFaltante);
@@ -261,6 +282,11 @@ public class Evento implements Comparable<Evento>{
     
     public static String getFechaString(String d){
         return d.split("T")[0];        
+    }
+    
+    public void confirmEvent(){
+        this.setConfirmed(true);
+        this.setState(false);
     }
 
     @Override

@@ -2,7 +2,6 @@ C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\Remi
 C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\bin\Debug\ReminderApp.exe
 C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\bin\Debug\ReminderApp.pdb
 C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\obj\Debug\ReminderApp.csproj.AssemblyReference.cache
-C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\obj\Debug\ReminderApp.csproj.SuggestedBindingRedirects.cache
 C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\obj\Debug\ReminderApp.csproj.CoreCompileInputs.cache
 C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\obj\Debug\ReminderApp.exe
 C:\Users\teval\OneDrive\Documentos\NetBeansProjects\ReminderApp\ReminderApp\ReminderApp\obj\Debug\ReminderApp.pdb

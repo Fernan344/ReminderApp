@@ -4,10 +4,12 @@
  */
 package UI.Components;
 
+import com.raven.table.TableCustom;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -26,7 +28,5 @@ public class CustomTableHeader extends DefaultTableCellRenderer{
         super.paint(grphcs); 
         grphcs.setColor(new Color(100, 100, 100));
         grphcs.drawLine(0, getHeight()-1, getWidth(), getWidth()-1);
-    }
-    
-    
+    }     
 }

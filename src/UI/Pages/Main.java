@@ -7,6 +7,8 @@ package UI.Pages;
 import UI.Events.MenuEvent;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -29,6 +31,7 @@ public class Main extends javax.swing.JFrame {
                 if(index >= 0 && index < comps.length) showForm((comp));
             }
         };
+        setIconImage(new ImageIcon("./system/reminder_cat.png").getImage());
         menuPrincipal.initMenu(evt);
         menuPrincipal.setSelected(1);
     }
@@ -43,7 +46,20 @@ public class Main extends javax.swing.JFrame {
     public static void reinitComponents(){
         comps = new Component[]{new CreateEvent(), reminderapp.ReminderApp.pagina, reminderapp.ReminderApp.retrasados, new Configurations(), new AdvancedOptions()};
     }
+    
+    public void setPage(String pageName){
+        if(pageName.equals("CreateEvent")){
+            ((CreateEvent)comps[0]).isEditionMode();
+            menuPrincipal.setSelected(0);
+        }else if (pageName.equals("MyEvents")){
+            menuPrincipal.setSelected(1);
+        }
+    }
 
+    public static Component getComponent(String comp){
+        if(comp.equals("Configurations")) return comps[3];
+        return null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,8 +73,8 @@ public class Main extends javax.swing.JFrame {
         menuPrincipal = new UI.Components.Menu();
         formsPane = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setResizable(false);
 
         formsPane.setLayout(new java.awt.BorderLayout());
 
@@ -75,8 +91,13 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menuPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
-            .addComponent(formsPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(formsPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(menuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(60, 60, 60))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -87,7 +108,9 @@ public class Main extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();

@@ -27,6 +27,10 @@ public class CreateEvent extends javax.swing.JPanel {
      */
     public CreateEvent() {
         initComponents();
+        cambiarVisibilidad(false);
+        jCheckBox1.setSelected(true);
+        jDateChooser1.setDateFormatString("MM/dd/YYYY");
+        jDateChooser2.setDateFormatString("MM/dd/YYYY");
     }
 
     /**
@@ -292,10 +296,10 @@ public class CreateEvent extends javax.swing.JPanel {
             int minFin = jSpinField2.getValue();
             int periodo = jSpinField3.getValue();
 
-            if(jButton1.getText().equals("Actualizar"))
-            DB.updateEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic), Integer.valueOf(String.valueOf(LocalStorage.getStorage("editIndex").getStorage())));
-            else DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic));
-
+            if(jButton1.getText().equals("Actualizar")){
+                DB.updateEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic, false), Integer.valueOf(String.valueOf(LocalStorage.getStorage("editIndex").getStorage())), LocalStorage.getStorage("editTableOrigin").getStorage().toString());                
+            }else DB.addEvent(new Evento(nombre, fechaInicio, fechaFin, notify, true, horaFin, minFin, "./public/Song.mp3", periodo, descripcion, isPeriodic, false));
+            reminderapp.ReminderApp.principal.setPage("MyEvents");
             DB.saveEvent();
 
         } catch (ParseException ex) {
@@ -305,7 +309,7 @@ public class CreateEvent extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    
+        clear();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jCheckBox2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox2MouseClicked
@@ -316,6 +320,20 @@ public class CreateEvent extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
+    private void clear(){
+        jButton1.setText("Crear");            
+        cambiarVisibilidad(false);
+        jTextField1.setText("");
+        jTextArea1.setText("");
+        jCheckBox2.setSelected(false);
+        jSpinField3.setValue(0);
+        jDateChooser2.setDate(new Date());
+        jDateChooser1.setDate(new Date());
+        jSpinField1.setValue(0);
+        jSpinField2.setValue(0);
+        jCheckBox1.setSelected(true);
+    }
+    
     private void cambiarVisibilidad(boolean visibily){
         jSpinField3.setVisible(visibily);
         jLabel9.setVisible(visibily);
@@ -325,15 +343,12 @@ public class CreateEvent extends javax.swing.JPanel {
         jButton3.setVisible(visibily);
     }
     
-    private void isEditionMode(){
+    public void isEditionMode(){
         
         Storage st = LocalStorage.getStorage("editEvent");
         if(st!=null){
             Evento ev = (Evento) st.getStorage();
-            
-            JOptionPane.showMessageDialog(this, "Estas En Modo Edicion de Eventos");
-            jButton1.setText("Actualizar");
-            
+            jButton1.setText("Actualizar");            
             cambiarVisibilidad(ev.isIsPeriodic());
             jTextField1.setText(ev.getNombre());
             jTextArea1.setText(ev.getDescripcion());
@@ -360,6 +375,7 @@ public class CreateEvent extends javax.swing.JPanel {
             + "de su evento. Todos los demas datos son iguales a un evento normal...");
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

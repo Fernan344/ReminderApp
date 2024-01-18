@@ -4,6 +4,8 @@
  */
 package Utilities;
 
+import Alarma.SettingsVerify;
+import UI.Pages.Configurations;
 import UI.Utils.LookManager;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,24 +26,26 @@ import org.json.simple.parser.ParseException;
  */
 public class Settings {
     private static String interfaz="Default";
+    private static Thread verify;
     private static String defaultSong = "./public/Song.mp3";
-    private static boolean silenciar = false;
+    private static boolean silenciar = false; // 5<5 false 5>5 false 5==5 true 5!=5 false 5>=5 true 5<=5 true
     private static String [] UIs = new String[] {"Default", "Oscuro", "Amarillo", "Azul", "Mint", "Aluminio", "Noire"};
     
-    public static void cargarConfiguracion(){
+    public static boolean cargarConfiguracion(){
         JSONParser parser = new JSONParser();
         try{
             File file = new File("./system/Config.json");
             File dir = new File("./system");
             
             if(!dir.exists()){
+                //
                 dir.mkdir();
+                //
             }
-            
             if(!file.exists()){
                 file.createNewFile();
                 createNewSetting();
-                return;
+                return true;
             }           
             
             file.setWritable(true, false);
@@ -53,12 +57,15 @@ public class Settings {
             defaultSong = "./public/Song.mp3";
             
             LookManager.turnLook(interfaz);
+            return true;
         }catch(IOException ex){
             JOptionPane.showMessageDialog(null,ex+"" +
             "\nNo se ha encontrado el archivo",
             "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
+            return false;
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(null, "Error: No se pudo cargar la configuracion");
+            return false;
         }
     }
     
@@ -72,6 +79,8 @@ public class Settings {
     
     public static void turnSilenciar(){
         silenciar = silenciar ? false : true;
+        if(!silenciar && verify!=null) verify.interrupt();
+        ((Configurations)reminderapp.ReminderApp.principal.getComponent("Configurations")).changeNotifiesStatus(silenciar);
     }
     
     public static String getDefaultSong(){
@@ -92,12 +101,17 @@ public class Settings {
             Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
     }
     
     public static String[] getInterfaces(){
         return UIs;
+    }
+    
+    public static void newLapseNoNotify(int lapseInMinutes){
+        if(verify!=null && !verify.isInterrupted()) verify.interrupt();
+        verify = new SettingsVerify("VerificacionDeNotificacion", lapseInMinutes);
+        verify.start();
     }
     
     public static void setUi(String ui){
